@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bgp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bgp
+  template:
+    metadata:
+      labels:
+        app: bgp
+    spec:
+      containers:
+      - name: bgp
+        image: localhost:5000/bgpforkubertest2
+        ports:
+        - containerPort: 6381
+        - containerPort: 6382
+        - containerPort: 6383
+        - containerPort: 6384
+        - containerPort: 6385
+        - containerPort: 6386
+        - containerPort: 6387
+        - containerPort: 6388
+        volumeMounts:
+        - mountPath: /src/BGPGeopolitics/results
+          name: local-storage
+      volumes:
+      - name: local-storage
+        persistentVolumeClaim:
+          claimName: local-pvc  

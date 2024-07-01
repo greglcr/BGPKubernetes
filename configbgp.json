@@ -1,0 +1,11 @@
+{
+    "start" : 1527811200,
+    "end" : 1527832800,
+    "dumpDuration" : 3600,
+    "path" : "/src/BGPGeopolitics/",
+    "ppath" : "/src/BGPGeopolitics/results/",
+    "port" : 6381,
+    "dbase" : 0,
+    "ipServers" : "BGP-service",
+    "pathCache" : "/src/BGPGeopolitics/dumpCache"
+}
