@@ -1,0 +1,13 @@
+FROM ubuntu:22.04
+
+#Necessary to dowload all libs after
+RUN apt update
+
+RUN apt install -y python3
+RUN apt install -y redis-server
+
+COPY DockerRedisServer /src/DockerRedisServer/
+
+#Start
+WORKDIR /src/
+ENTRYPOINT sh -c "python3 DockerRedisServer/shardedRedis.py"

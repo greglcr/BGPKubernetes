@@ -1,0 +1,53 @@
+FROM ubuntu:22.04
+
+COPY hiredis /src/hiredis
+COPY redis-plus-plus /src/redis-plus-plus
+
+#WORKDIR /src
+
+#Necessary to dowload all libs after
+RUN apt update
+
+#Everything needed for the C++ code
+RUN apt install -y g++
+RUN DEBIAN_FRONTEND=noninteractive apt install -y libboost-all-dev
+RUN apt install -y libcurl4-openssl-dev
+RUN apt install -y libsqlite3-dev
+RUN apt install -y make
+RUN apt install -y cmake
+RUN \
+	cd /src/hiredis && \
+	make && \
+	make install
+RUN \
+	cd /src/redis-plus-plus && \
+	mkdir build && \
+	cd build && \
+	cmake .. && \
+	make && \
+	make install
+RUN \
+	apt install -y curl apt-transport-https ssl-cert ca-certificates gnupg lsb-release && \
+	curl -1sLf 'https://dl.cloudsmith.io/public/wand/libwandio/cfg/setup/bash.deb.sh' | bash && \
+	echo "deb https://pkg.caida.org/os/$(lsb_release -si|awk '{print tolower($0)}') $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/caida.list && \
+	apt install -y wget && \
+	wget -O /etc/apt/trusted.gpg.d/caida.gpg https://pkg.caida.org/os/ubuntu/keyring.gpg && \
+	apt update && \
+	apt install -y bgpstream
+RUN apt install -y libtbb-dev
+
+COPY BGPGeopolitics /src/BGPGeopolitics
+
+#Build the executable
+WORKDIR /src/BGPGeopolitics
+RUN \
+	cmake CMakeLists.txt && \
+	make
+
+#For the configuration file
+COPY configbgp.json /src/
+
+#Start
+WORKDIR /src/
+#ENTRYPOINT sh -c "sleep 5 && ./BGPGeopolitics/BGPGeopolitics -f /src/configbgp.json"
+ENTRYPOINT sh -c "sleep 100000000"
