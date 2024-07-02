@@ -1,0 +1,20 @@
+FROM ubuntu:22.04
+
+USER root
+
+COPY shardedRedis.py /src/shardedRedis.py
+COPY redis.conf /src/redis.conf
+
+#ADD docker-entrypoint.sh /usr/src/app/docker-entrypoint.sh
+
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y python3
+RUN apt install -y redis-server
+
+WORKDIR /src/
+
+ENTRYPOINT ["python3", "shardedRedis.py"]
+
+
+
