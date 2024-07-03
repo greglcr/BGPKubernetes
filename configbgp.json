@@ -6,6 +6,6 @@
     "ppath" : "/src/BGPGeopolitics/results/",
     "port" : 6381,
     "dbase" : 0,
-    "ipServers" : "BGP-service",
+    "ipServers" : "redisbgp",
     "pathCache" : "/src/BGPGeopolitics/dumpCache"
 }
